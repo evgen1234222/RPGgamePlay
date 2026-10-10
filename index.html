@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#050508">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Ash &amp; Bone">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <title>Ash &amp; Bone</title>
+  <script type="module" crossorigin src="./assets/index-DM5X0-yy.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CJNX6UGh.css">
+</head>
+<body class="booting">
+  <div id="intro"><video playsinline preload="auto"></video><div class="in-ui"><button class="in-snd">🔊 Со звуком</button><button class="in-skip">Пропустить <kbd>Пробел</kbd></button></div></div>
+  <div id="dev-warning" style="display:none;position:fixed;inset:0;z-index:99;background:#0b0806;color:#e6d8bd;font:22px Georgia,serif;align-items:center;justify-content:center;text-align:center;padding:20px">
+    <div>Это исходный файл игры, он не запускается напрямую.<br><br>Открой файл <b style="color:#e8c56a">Играть.html</b> в этой же папке.</div>
+  </div>
+  <script>if (location.protocol === 'file:') document.getElementById('dev-warning').style.display = 'flex';</script>
+  <div id="game"></div>
+  <div id="install-tip" class="hidden"><img src="icon-192.png" alt=""><div class="it-t"></div><button class="it-x">✕</button></div>
+
+  <div id="hud">
+    <div id="shade"></div>
+    <div id="legendflash"></div>
+    <div id="lootfeed"></div>
+    <div id="vignette"></div>
+    <canvas id="worldmap" class="hidden"></canvas>
+    <div id="bars"></div>
+    <div id="floaters"></div>
+    <div id="labels"></div>
+    <div id="objarrow" class="hidden"><i>➤</i><span></span></div>
+
+    <div id="fps" class="hidden"></div>
+    <div id="bossbar" class="hidden">
+      <div class="name">Костяной Владыка</div>
+      <div class="bar"><div class="trail"></div><div class="fill"></div></div>
+      <div class="debuffs"></div>
+    </div>
+
+    <div id="riftbar" class="hidden"><div class="name">Разлом</div><div class="bar"><div class="fill"></div></div><div class="mods"></div></div>
+
+    <div id="topright">
+      <div id="kills">Убито: 0</div>
+      <button id="menu-toggle" class="ui mbtn" title="Меню">☰ Меню<b class="badge hidden"></b></button>
+      <div id="menu-btns">
+        <button id="inv-btn" class="ui mbtn" title="Снаряжение (I)">Сумка <small>I</small></button>
+        <button id="skills-btn" class="ui mbtn" title="Навыки (K)">Навыки <small>K</small></button>
+        <button id="tree-btn" class="ui mbtn" title="Дерево умений (P)">Умения <small>P</small><b class="badge hidden"></b></button>
+        <button id="journal-btn" class="ui mbtn" title="Журнал (J)">Журнал <small>J</small></button>
+        <button id="map-btn" class="ui mbtn" title="Карта (M)">Карта <small>M</small></button>
+        <button id="pet-btn" class="ui mbtn hidden" title="Питомец (O)">Питомец <small>O</small></button>
+        <button id="set-btn" class="ui mbtn" title="Настройки (Esc)">⚙︎<span class="lbl"> Настройки</span> <small>Esc</small></button>
+        <button id="portal-btn" class="ui mbtn hidden" title="Портал в лагерь (T)">Портал <small>T</small></button>
+      </div>
+      <canvas id="minimap" class="ui"></canvas>
+      <div id="qtrack" class="hidden"></div>
+      <div id="buffs"></div>
+    </div>
+
+    <div id="banner"><div class="title"></div><div class="sub"></div></div>
+    <div id="toast"></div>
+    <div id="streak"><div class="lbl">Серия</div><div class="n">×0</div><div class="t"><div class="tb"></div></div></div>
+
+    <div id="xp"><div class="f"></div><span></span></div>
+    <div id="bottom">
+      <div class="orb life" id="orb-life"><div class="fill"></div><div class="glass"></div><span class="val"></span></div>
+      <div id="bar" class="ui">
+        <div class="slot flask" id="flask-0"><div class="icon"></div><div class="pips"></div><div class="key">1</div></div>
+        <div class="slot flask" id="flask-1"><div class="icon"></div><div class="pips"></div><div class="key">2</div></div>
+        <div class="sep"></div>
+        <div class="slot skill" id="sk-lmb"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">ЛКМ</div></div>
+        <div class="slot skill" id="sk-rmb"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">ПКМ</div></div>
+        <div class="slot skill" id="sk-q"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">Q</div></div>
+        <div class="slot skill" id="sk-e"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">E</div></div>
+        <div class="slot skill" id="sk-r"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">R</div></div>
+        <div class="slot skill" id="sk-dodge"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">Пробел</div></div>
+        <div class="slot skill" id="sk-portal"><div class="icon"></div><div class="cd"></div><div class="cdt"></div><div class="key">T</div></div>
+      </div>
+      <div class="orb mana" id="orb-mana"><div class="fill"></div><div class="glass"></div><span class="val"></span></div>
+    </div>
+
+    <div id="inv" class="ui hidden win">
+      <div class="inv-panel inv2">
+        <div class="inv-head"><span class="inv-title">Снаряжение</span><span class="inv-gold"></span><button class="inv-close">✕</button></div>
+        <div class="inv-body">
+          <div class="paperdoll">
+            <div class="pd-col pd-left"></div>
+            <div class="pd-stage">
+              <canvas class="pd-canvas"></canvas>
+              <div class="pd-name"></div>
+              <div class="pd-power"></div>
+              <div class="pd-hint">Перетащи вещь на героя или в ячейку · крути героя мышью</div>
+            </div>
+            <div class="pd-col pd-right"></div>
+          </div>
+          <div class="inv-side">
+            <div class="inv-tabs"><button data-tab="bag" class="on">Сумка <span class="bagcount"></span></button><button data-tab="stats">Характеристики</button></div>
+            <div class="tab tab-bag"><div class="bag"></div><button class="bag-sort">Сортировать</button><div class="dim inv-help">ЛКМ — надеть/снять · ПКМ — выбросить · тащи вещь, чтобы переложить</div></div>
+            <div class="tab tab-stats hidden"><div class="stats"></div></div>
+          </div>
+          <div class="inv-detail"><div class="dim">Нажми на вещь — здесь её свойства и кнопки «Надеть», «Выбросить»</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="skills" class="ui hidden win">
+      <div class="inv-panel skills-panel">
+        <div class="inv-head">Навыки <button class="inv-close">✕</button></div>
+        <div class="sk-hint"></div>
+        <div class="sk-rows"></div>
+        <div class="bag-head">Камни в сумке</div>
+        <div class="sk-gems"></div>
+        <div class="sk-detail"><div class="dim">Нажми на камень — здесь его свойства. Потом нажми ячейку слева, чтобы вставить</div></div>
+      </div>
+    </div>
+
+    <div id="tree" class="ui hidden win">
+      <div class="inv-panel tree-panel">
+        <div class="inv-head">Дерево умений <span class="tree-pts"></span><span class="tree-find"><input class="tree-search" type="search" placeholder="Поиск: огонь, здоровье, крит…" autocomplete="off"><span class="tree-found dim"></span></span><span class="tree-tools"><button class="tree-apply hidden">Применить</button><button class="tree-cancel hidden">Отменить</button><button class="tree-zout">−</button><button class="tree-zin">+</button><button class="tree-reset">Сбросить</button><button class="inv-close">✕</button></span></div>
+        <div class="tree-help dim"></div><svg class="tree-svg"></svg>
+      </div>
+    </div>
+    <div id="trade" class="ui hidden win">
+      <div class="inv-panel trade-panel">
+        <div class="inv-head"><span class="tr-title"></span><span class="gold"></span><button class="inv-close">✕</button></div>
+        <div class="tr-hint sk-hint"></div>
+        <div class="tr-tools"></div>
+        <div class="tr-main">
+          <div class="tr-col"><div class="bag-head tr-left-title"></div><div class="bag tr-left"></div></div>
+          <div class="tr-col"><div class="bag-head">Сумка</div><div class="bag tr-bag"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="waypoint" class="ui hidden win">
+      <div class="inv-panel wp-panel">
+        <div class="inv-head">Врата <button class="inv-close">✕</button></div>
+        <div class="wp-list"></div>
+      </div>
+    </div>
+
+    <div id="pets" class="ui hidden win">
+      <div class="inv-panel pet-panel">
+        <div class="inv-head"><span>Зверовод Тилли</span> <button class="inv-close">✕</button></div>
+        <div class="pet-body"></div>
+      </div>
+    </div>
+    <div id="dialog" class="ui hidden win">
+      <div class="inv-panel dlg-panel">
+        <div class="inv-head">Капитан Брам <button class="inv-close">✕</button></div>
+        <div class="dlg-text"></div>
+        <div class="dlg-btns"></div>
+      </div>
+    </div>
+
+    <div id="settings" class="ui hidden win">
+      <div class="inv-panel set-panel">
+        <div class="inv-head">Настройки <button class="inv-close">✕</button></div>
+        <label class="set-row"><span>Музыка</span><input type="range" min="0" max="100" data-s="music"></label>
+        <label class="set-row"><span>Звуки</span><input type="range" min="0" max="100" data-s="sfx"></label>
+        <label class="set-row"><span>Графика</span><select data-s="quality"><option value="high">Высокая (свечение, тени)</option><option value="low">Быстрая (для слабых устройств)</option></select></label>
+        <label class="set-row"><span>Кадров в секунду</span><select data-s="fpsCap"><option value="60">60 — плавнее</option><option value="30">30 — меньше греется, дольше батарея</option></select></label>
+        <label class="set-row"><span>Числа урона</span><input type="checkbox" data-s="numbers"></label>
+        <label class="set-row"><span>Счётчик FPS (кадров в секунду)</span><input type="checkbox" data-s="fps"></label>
+        <label class="set-row touch-only"><span>Размер кнопок управления</span><select data-s="btnScale"><option value="0.85">Мелкие</option><option value="1">Обычные</option><option value="1.15">Крупные</option><option value="1.3">Очень крупные</option></select></label>
+        <label class="set-row touch-only"><span>Вибрация при нажатии</span><input type="checkbox" data-s="vibro"></label>
+        <label class="set-row"><span>Фильтр добычи</span><select data-s="filter"><option value="0">Показывать всё</option><option value="1">Скрыть обычные (белые)</option><option value="2">Скрыть обычные и магические</option></select></label>
+        <div class="set-row"><span>Герой</span><button class="set-hero">Сменить героя</button></div>
+        <div class="set-row"><span>Перенос на другое устройство</span><span><button class="set-export">Скопировать код</button> <button class="set-import">Вставить код</button></span></div>
+        <textarea class="set-code hidden" spellcheck="false" placeholder="Вставь сюда код сохранения и нажми «Загрузить»"></textarea>
+        <button class="set-load hidden">Загрузить</button>
+        <div class="set-row"><span>Прогресс</span><button class="set-reset">Удалить всех героев</button></div>
+        <div class="dim set-note">Игра сохраняется сама — в этом браузере.</div>
+      </div>
+    </div>
+
+    <div id="charsel" class="ui hidden">
+      <div class="cs-title">Ash <span class="amp">&amp;</span> Bone<small>chronicles of the Last Fire</small></div>
+      <div class="cs-panel">
+        <div class="cs-role"></div>
+        <div class="cs-name"></div>
+        <div class="cs-desc"></div>
+        <div class="cs-bars"></div>
+        <div class="cs-save"></div>
+        <button data-cs="del" class="cs-del hidden">Удалить героя</button>
+      </div>
+      <div class="cs-bottom">
+        <button data-cs="prev" class="cs-arrow">◀︎</button>
+        <button data-cs="play" class="cs-play">Начать путь</button>
+        <button data-cs="next" class="cs-arrow">▶︎</button>
+      </div>
+      <div class="cs-dots"><i data-i="0"></i><i data-i="1"></i><i data-i="2"></i></div>
+      <button data-cs="help" class="cs-helpbtn">Управление</button>
+      <div class="cs-help hidden">
+        <div><b>WASD</b> движение · <b>мышь</b> прицел</div>
+        <div><b>ЛКМ ПКМ Q E R</b> навыки · <b>Пробел</b> перекат</div>
+        <div><b>1 / 2</b> флаконы · <b>F</b> поднять / говорить</div>
+        <div><b>I</b> снаряжение · <b>K</b> навыки · <b>P</b> умения · <b>T</b> портал</div>
+        <div>Красные зоны на полу — сюда ударят. Уходи перекатом!</div>
+        <div class="touch-only">Телефон: левый палец — джойстик, справа — кнопки навыков.</div>
+      </div>
+    </div>
+
+    <div id="journal" class="ui hidden win">
+      <div class="inv-panel j-panel">
+        <div class="inv-head">Журнал <button class="inv-close">✕</button></div>
+        <div class="inv-tabs"><button data-jt="quests" class="on">Задания</button><button data-jt="bounties">Поручения</button><button data-jt="ach">Достижения</button></div>
+        <div class="j-body"></div>
+      </div>
+    </div>
+    <div id="story" class="ui hidden win"><div class="st-bar"></div><div class="st-body"></div><div class="st-bar"></div></div>
+    <div id="tutor" class="ui hidden"><div class="tu-n"></div><div class="tu-t"></div><button class="tu-skip">Пропустить обучение</button></div>
+    <div id="summary" class="hidden"></div>
+    <div id="achieve" class="hidden"><span class="ai"></span><div><small>Достижение</small><b></b><span class="ad"></span></div></div>
+
+    <div id="tip" class="hidden"></div>
+
+    <div id="screen" class="ui"><div id="boot-bg"><i class="glow"></i></div>
+      <div class="panel">
+        <h1 id="screen-title">Ash &amp; Bone</h1>
+        <p id="screen-sub">Хроники Последнего Огня</p>
+        <div id="loading"><div class="lbar"><div class="lfill"></div></div><span>Загрузка…</span><p class="boot-tip"></p></div>
+        <table id="controls" class="hidden">
+          <tr><td>W A S D</td><td>движение</td></tr>
+          <tr><td>Мышь</td><td>прицел</td></tr>
+          <tr><td>ЛКМ ПКМ Q E R</td><td>Навыки класса (меняются камнями в окне K)</td></tr>
+          <tr><td>Пробел</td><td>Перекат — неуязвим во время переката</td></tr>
+          <tr><td>M</td><td>Карта зоны</td></tr>
+          <tr><td>1 / 2</td><td>Флаконы здоровья / маны</td></tr>
+          <tr><td>F / клик</td><td>Поднять предмет (клик по названию — подойти и поднять)</td></tr>
+          <tr><td>I · K · P</td><td>Снаряжение · Навыки (камни) · Дерево умений</td></tr>
+          <tr><td>T</td><td>Портал в лагерь (из подземелья)</td></tr>
+          <tr><td>F / клик</td><td>Говорить с жителями лагеря, войти во Врата</td></tr>
+        </table>
+        <div id="touch-help">
+          <p><b>Левый палец</b> — коснись где угодно слева и веди: это джойстик.</p>
+          <p><b>Правый палец</b> — кнопки навыков. Большая — удар (держи). Цель выбирается сама.</p>
+          <p>Кнопка с двойной стрелкой — перекат. Флаконы — кнопки 1 и 2 на панели внизу.</p>
+          <p>Вещи: коснись названия на полу или кнопки «Поднять». «Сумка» — справа вверху.</p>
+        </div>
+        <p id="screen-hint" class="hidden">Красные зоны на полу — сюда сейчас ударят. Уходи перекатом!</p>
+        <button id="screen-btn" class="hidden">Начать</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rotate"><div>↻<br>Поверни телефон горизонтально</div></div>
+
+</body>
+</html>
