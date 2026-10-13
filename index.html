@@ -16,8 +16,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Cormorant+SC:wght@600;700&family=Roboto+Condensed:wght@400;700&display=swap">
   <title>Ash &amp; Bone</title>
-  <script type="module" crossorigin src="./assets/index-lu04PgzY.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BEjEKz6F.css">
+  <script type="module" crossorigin src="./assets/index-CiU4ey0p.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-oUoQJo4V.css">
 </head>
 <body class="booting">
   <div id="intro"><video playsinline preload="auto"></video><div class="in-ui"><button class="in-snd">🔊 Со звуком</button><button class="in-skip">Пропустить <kbd>Пробел</kbd></button></div></div>
@@ -131,24 +131,23 @@
     </div>
     <div id="trade" class="ui hidden win">
       <div class="inv-panel trade-panel">
-        <div class="inv-head"><span class="tr-title"></span><span class="gold"></span><button class="inv-close">✕</button></div>
-        <div class="tr-hint sk-hint"></div>
-        <div class="tr-tools"></div>
+        <div class="inv-head"><span class="npc-who"><span class="npc-ava tr-ava"></span><span class="npc-nm"><span class="tr-title"></span><small class="npc-sub tr-sub"></small></span></span><span class="gold"></span><button class="inv-close">✕</button></div>
+        <div class="tr-hint sk-hint npc-hint"></div>
         <div class="tr-main">
-          <div class="tr-col"><div class="bag-head tr-left-title"></div><div class="bag tr-left"></div></div>
-          <div class="tr-col"><div class="bag-head">Сумка</div><div class="bag tr-bag"></div></div>
+          <div class="tr-col"><div class="bag-head tr-left-title"></div><div class="bag tr-left"></div><div class="tr-tools"></div></div>
+          <div class="tr-col"><div class="bag-head"><span>Сумка</span><span class="tr-bagn bagcount"></span></div><div class="bag tr-bag"></div><div class="tr-sell"></div></div>
         </div>
       </div>
     </div>
 
     <div id="craft" class="ui hidden win">
       <div class="inv-panel craft-panel">
-        <div class="inv-head"><span>Кузнец Горн</span><span class="gold"></span><button class="inv-close">✕</button></div>
-        <div class="cr-hint sk-hint"></div>
+        <div class="inv-head"><span class="npc-who"><span class="npc-ava cr-ava"></span><span class="npc-nm"><span>Кузнец Горн</span><small class="npc-sub">Меняет свойства вещей за золото и Эфир</small></span></span><span class="gold"></span><button class="inv-close">✕</button></div>
+        <div class="cr-hint sk-hint npc-hint"></div>
         <div class="cr-main">
           <div class="cr-left"><div class="cr-tabs"></div><div class="cr-list"></div></div>
           <div class="cr-mid"><div class="cr-target"></div><div class="cr-acts"></div></div>
-          <div class="cr-right"><div class="bag-head">Надето</div><div class="bag cr-eq"></div><div class="bag-head">Сумка</div><div class="bag cr-bag"></div></div>
+          <div class="cr-right"><div class="bag-head cr-step"><span><b class="stp">1</b> Вещь — надетая</span></div><div class="bag cr-eq"></div><div class="bag-head cr-step"><span>или из сумки</span><span class="cr-bagn bagcount"></span></div><div class="bag cr-bag"></div></div>
         </div>
       </div>
     </div>
